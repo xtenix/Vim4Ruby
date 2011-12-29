@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 git_bundles = [ 
+  "git://github.com/tpope/vim-pathogen.git",
   "git://github.com/gregsexton/gitv.git",
   "git://github.com/scrooloose/syntastic.git",
   "git://github.com/astashov/vim-ruby-debugger.git",
@@ -50,8 +51,8 @@ vim_org_scripts = [
 require 'fileutils'
 require 'open-uri'
 
-#bundles_dir = File.join(File.dirname(__FILE__), "bundle")
-bundles_dir = File.join("~", ".vim", "bundle")
+bundles_dir = File.join(ENV["HOME"], ".vim", "bundle")
+puts "bd == #{bundles_dir}"
 
 FileUtils.cd(bundles_dir)
 

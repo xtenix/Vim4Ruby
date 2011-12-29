@@ -1,8 +1,8 @@
-One of Vim's strengths is its extensibility, allowing each user to achieve a personalized setup that is ideal for their needs and preferences.  But this customizability is a double edge sword, because there is a lot of work to do in order to turn a basic Vim install, to a tricked out Vim-based ruby IDE.  A novice can spend a week just trying to figure out what plugins they need, how best to set them up etc.
+One of Vim's strengths is its extensibility, allowing each user to achieve a personalized setup that is ideal for their needs and preferences.  But this customizability is a double edge sword, because there is a lot of work to do in order to turn a basic Vim install, into a tricked out Vim-based ruby IDE.  A novice can spend a week just trying to figure out what plugins they need, how best to set them up etc.
 
 This project is meant to be a jumpstart, to just get up and working with a Vim that has it all for Ruby development.  You may prefer different key mappings etc.  But at least you will have a fully specified Vim for Ruby IDE, which you can easily tailor from this starting point.
 
-Follow these steps:
+Follow these MacOS-specific steps:
 
 1. Install Ruby
 
@@ -10,16 +10,27 @@ Follow these steps:
   
     $ gem install ruby-debug ruby-debug-ide
 
-2. Install Vim (must install with Ruby, Python and clientserver support enabled!)
+2. Install Homebrew
 
-    You have to build Vim, because the binary downloads don't have ruby support enabled.  Do this:
+   Homebrew for MacOS is a tool that builds and installs software.  Make sure you have it installed for the next step.
+
+3. Install Vim (must install with Ruby, Python and clientserver support enabled!)
+
+    You have to do a custom build of Vim, because the binary version of MacVim on the web is built with ruby disabled.  To build a ruby, python an clientserver enabled version of Vim, just let Homebrew do its thing:
 
     $ brew install vim    # homebrew builds with ruby enabled by default
-    
-3. Run update_bundles
 
-   This will download and install all plugins.  It will also copy the .vimrc and .gvimrc files to your HOME directory.
+4. Run update_bundles
+
+   This will download and install all Vim plugins I have found to be useful as part of a Vim IDE for Ruby.  It will also copy the .vimrc and .gvimrc files to your HOME directory.
+
+5. Start Vim
+
+   Once you start Vim, press Command-o.  If the NERDTree file explorer pops up, everything is ready.
 
 That's it.
 
 NOTE: MacOS is the only platform I have tested these steps on so far.
+
+CREDITS:  The update_bundles script was copied (with little change) directly from Tammer Saleh's blog at:
+           http://tammersaleh.com/posts/the-modern-vim-config-with-pathogen

@@ -8,7 +8,20 @@
 " ,t - FuzzyFinder
 "
 "
-"
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Pathogen
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Must be first line to ensure pathogen is used to manage plugins
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+
+filetype off
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+filetype plugin indent on
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme
@@ -25,11 +38,6 @@ colorscheme wombat
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-filetype plugin indent on
 
 " Sets how many lines of history VIM has to remember
 set history=700
