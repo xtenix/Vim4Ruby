@@ -1,0 +1,27 @@
+
+One of Vim's strengths is its extensibility, allowing each user to achive a personalized setup that is ideal for them.  But it is a double edge sword, because there is a lot of work to do with to go from a basic Vim install, to a tricked out Vim-based ruby IDE.
+
+This project is meant to be a jumpstart, to just get up and working with a Vim that has it all for Ruby development.
+
+NOTE: MacOS is the only platform I have tested these steps on so far.
+
+Follow these steps:
+
+1. Install Ruby
+
+   More than one way to get Ruby setup, but I recommend installing RVM and having RVM install a ruby version for you. Also, make sure you include the ruby debugging gems in your gemset, for example:
+  
+    $ gem install ruby-debug ruby-debug-id
+
+2. Install Vim -- with Ruby, Python and clientserver support
+
+    You have to build Vim, because the binary downloads don't have ruby support enabled.  Do this:
+
+    $ brew install vim    # homebrew builds with ruby enabled by default
+    
+3. Run update_bundles
+
+   This will download and install all plugins.
+   It will also copy the .vimrc and .gvimrc files to you HOME directory.
+
+That's it.
