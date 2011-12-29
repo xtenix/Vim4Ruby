@@ -24,13 +24,11 @@ Follow these MacOS-specific steps:
 
    This will download and install all Vim plugins I have found to be useful as part of a Vim IDE for Ruby.
 
-5. Use .vimrc and .gvimrc
+5. Copy or merge .vimrc and .gvimrc to your HOME directory
 
    Copy in whole or in part the .vimrc and .gvimrc files included in this project to your HOME directory.  While you
    may want to skip parts or use your own key mappings, at least make sure that the pathogen section is reflected
    in your .vimrc file and positioned at the top.  Otherwise, no plugins will load.
-
-  It will also copy the .vimrc and .gvimrc files to your HOME directory.
 
 6. Start Vim
 
