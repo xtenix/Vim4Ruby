@@ -4,4 +4,5 @@ if has("gui_macvim")
   " map <D-t> :CommandT<CR>
   macmenu &File.Open\.\.\. key=<nop>
   map <D-o> :NERDTreeToggle RG<cr>
+  map <D-r> :RdbTest<cr>
 endif

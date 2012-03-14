@@ -27,12 +27,18 @@ filetype plugin indent on
 " => Theme
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-syntax on
-set guioptions-=T
-"set background=dark
-colorscheme wombat
-"set nonu
-  set guifont=Menlo\ Regular:h13
+if has("gui_running")
+  syntax on
+  set guioptions-=T
+  set background=dark
+  colorscheme molokai
+  "set nonu
+    set guifont=Menlo\ Regular:h13
+else
+    colorscheme zellner
+    set background=light
+    set nonu
+endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -105,74 +111,114 @@ set tabstop=4
 set shiftwidth=2
 set expandtab
 set smarttab
-set ai "Auto indent
-set si "Smart indent
+" set ai "Auto indent
+" set si "Smart indent
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Basic Navigation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+set wmh=0
+
+function! WinMove(key) 
+  let t:curwin = winnr()
+  exec "wincmd ".a:key
+  if (t:curwin == winnr()) "we havent moved
+    if (match(a:key,'[jk]')) "were we going up/down
+      wincmd v
+    else 
+      wincmd s
+    endif
+    exec "wincmd ".a:key
+  endif
+endfunction
+ 
+" map <S-C-j> <C-W>j<C-W>_
 " Smart way to move btw. windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-map <C-x> <C-W>c
+" map <C-j> <C-W>j  " Move without splitting
+" map <C-k> <C-W>k
+" map <C-h> <C-W>h
+" map <C-l> <C-W>l
+" map <C-j> :call WinMove('j')<cr>
+map <C-k> :call WinMove('k')<cr>
+map <C-h> :call WinMove('h')<cr>
+map <C-l> :call WinMove('l')<cr>
+map <C-j> :call WinMove('j')<cr>
+
+
+map <C-s> <C-W>v
+map <C-i> <C-W>s
 " map <C-s> <C-W>v
 " map <C-a> <C-W>s
+"      map <C-0> <C-W>L
+"      map <C-1> <C-W>H
+"      map <C-> <C-W>+
 
 " Switch to alternate file
 map <C-Tab> :bprevious<cr>
 map <C-S-Tab> :bprevious<cr>
 
 
+map <leader>j <C-W>J
+map <leader>k <C-W>K
+map <leader>h <C-W>H
+map <leader>l <C-W>L
+
+
+
 """"""""""""""""""""""""""""""
 " => Statusline
 """"""""""""""""""""""""""""""
-" Always hide the statusline
-set laststatus=2
+if has("gui_running")
+  " Always hide the statusline
+  set laststatus=2
 
-" Format the statusline
-" set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c\ %P
-" set statusline=%<\ %{HasPaste()}%t%m\ @\ %f%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
-" set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir(\"\%f\"\,\"\%t\")}%f%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
-" set statusline=%<\ %{HasPaste()}%F%m%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
-" set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir()}%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
-" set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir()}%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
-set statusline=%<\ %{HasPaste()}%t%m%r%h%=%-35.(@\ %{StatusLineCurFileDir()}\ \|\ \CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
-set statusline=%<\ %{HasPaste()}%f%m%r%h%=%-35.(\ \CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
+  " Format the statusline
+  " set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L:%c\ %P
+  " set statusline=%<\ %{HasPaste()}%t%m\ @\ %f%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
+  " set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir(\"\%f\"\,\"\%t\")}%f%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
+  " set statusline=%<\ %{HasPaste()}%F%m%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
+  " set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir()}%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\ of\ %L,\ col:\ %c%V\ (%P)\ %y%)
+  " set statusline=%<\ %{HasPaste()}%t%m\ @\ %{CurFileDir()}%r%h%=%-35.(\CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
+  "set statusline=%<\ %{HasPaste()}%t%m%r%h%=%-35.(@\ %{StatusLineCurFileDir()}\ \|\ \CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
+  "set statusline=%<\ %{HasPaste()}%f%m%r%h%=%-35.(\ \CWD:\ %r%{CurDir()}%h\ \|\ line:\ %l\/\%L\ (%P)\ %y%)
 
-function! CurDir()
-    let curdir = substitute(getcwd(), '/Users/rdhallman/', "~/", "g")
-    " let curdir = getcwd()
-    return curdir
-endfunction
+  " set statusline=%<\ \ \ %{HasPaste()}%t
 
-function! StatusLineCurFileDir()
-  let filename = expand("%:t")
-  let relpath = expand("%:f")
-  let userpath = substitute(relpath, '/Users/rdhallman/', "~/", "g")
-  let curdir = substitute(userpath, filename, "", "g")
-  retur curdir
-endfunction
+  set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+  
+  function! CurDir()
+      let curdir = substitute(getcwd(), '/Users/rdhallman/', "~/", "g")
+      " let curdir = getcwd()
+      return curdir
+  endfunction
 
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    else
-        return ''
-    endif
-endfunction
+  function! StatusLineCurFileDir()
+    let filename = expand("%:t")
+    let relpath = expand("%:f")
+    let userpath = substitute(relpath, '/Users/rdhallman/', "~/", "g")
+    let curdir = substitute(userpath, filename, "", "g")
+    retur curdir
+  endfunction
+
+  function! HasPaste()
+      if &paste
+          return 'PASTE MODE  '
+      else
+          return ''
+      endif
+  endfunction
 
 
-" Specify the behavior when switching between buffers
-try
-  set switchbuf=usetab
-  set stal=2
-catch
-endtry
+  " Specify the behavior when switching between buffers
+  try
+    set switchbuf=usetab
+    set stal=2
+  catch
+  endtry
 
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Codepaths
@@ -215,7 +261,7 @@ nmap <C-tab> :BufExplorer<CR>
 map <C-tab> :BufExplorer<CR>
 imap <C-tab> <Esc>:BufExplorer<CR>
 
-nmap <Leader>k  :bdelete!<CR>
+nmap <Leader>x  :bdelete!<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -278,19 +324,18 @@ nmap <Leader>f  :LustyFilesystemExplorerFromHere<CR>
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
-nmap <Leader>s  :FufFile<CR>
 nmap <Leader>t  :FufFile<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Specky
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:speckyRunSpecCmd = "rspec -r ~/.vim/bundle/Specky/ruby/specky_formatter.rb -f SpeckyFormatter"
-let g:speckyBannerKey        = "<C-S>b"
-let g:speckyQuoteSwitcherKey = "<C-S>'"
-let g:speckyRunRdocKey       = "<C-S>r"
-let g:speckySpecSwitcherKey  = "<C-S>x"
-let g:speckyRunSpecKey       = "<C-S>s"
+let g:speckyRunSpecCmd = "bundle exec rspec -r ~/.vim/bundle/Specky/ruby/specky_formatter.rb -f SpeckyFormatter"
+let g:speckyBannerKey        = "<C-r>b"
+let g:speckyQuoteSwitcherKey = "<C-r>'"
+let g:speckyRunRdocKey       = "<C-r>r"
+let g:speckySpecSwitcherKey  = "<C-r>x"
+let g:speckyRunSpecKey       = "<Leader>r"
 let g:speckyRunRdocCmd       = "fri -L -f plain"
 let g:speckyWindowType       = 2
 
@@ -302,19 +347,49 @@ let g:speckyWindowType       = 2
 let g:ruby_debugger_spec_path = 'rspec'
 let g:ruby_debugger_progname = 'mvim'
 
+map <Lkader>b  :call g:RubyDebugger.toggle_breakpoint()<CR>
 map <Leader>b  :call g:RubyDebugger.toggle_breakpoint()<CR>
 map <Leader>v  :call g:RubyDebugger.open_variables()<CR>
-map <Leader>m  :call g:RubyDebugger.open_breakpoints()<CR>
-map <Leader>t  :call g:RubyDebugger.open_frames()<CR>
+map <Leader>dm  :call g:RubyDebugger.open_breakpoints()<CR>
+map <Leader>dt  :call g:RubyDebugger.open_frames()<CR>
 map <Leader>s  :call g:RubyDebugger.step()<CR>
-map <Leader>f  :call g:RubyDebugger.finish()<CR>
-map <Leader>n  :call g:RubyDebugger.next()<CR>
-map <Leader>c  :call g:RubyDebugger.continue()<CR>
-map <Leader>e  :call g:RubyDebugger.exit()<CR>
-map <Leader>d  :call g:RubyDebugger.remove_breakpoints()<CR>
+map <Leader>df  :call g:RubyDebugger.finish()<CR>
+map <Leader>m  :call g:RubyDebugger.next()<CR>
+map <Leader>dc  :call g:RubyDebugger.continue()<CR>
+map <Leader>de  :call g:RubyDebugger.exit()<CR>
+map <Leader>dr  :call g:RubyDebugger.remove_breakpoints()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let g:syntastic_auto_loc_list=1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ConqueTerm
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ConqueTerm_Color = 1
+let g:ConqueTerm_FastMode = 0
+let g:ConqueTerm_TERM = 'xterm'
+let g:ConqueTerm_Syntax = 'conque_term'
+let g:ConqueTerm_PromptRegex = '^\w\+@[0-9A-Za-z_.-]\+:[0-9A-Za-z_./\~,:-]\+\$'
+
+map <leader>c :ConqueTerm bash<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => ZoomWin
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <C-a> <C-W>o
+
+set nowrap
+
+
+
+nmap <left>  :3wincmd <<cr>
+nmap <right> :3wincmd ><cr>
+nmap <up>    :3wincmd +<cr>
+nmap <down>  :3wincmd -<cr>
+
+
+
