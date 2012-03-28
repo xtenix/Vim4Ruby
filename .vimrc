@@ -25,13 +25,17 @@ filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Theme
+    "set guifont=Menlo\ Regular:h13
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 if has("gui_running")
   syntax on
   set guioptions-=T
   set background=dark
-  colorscheme molokai
+  "colorscheme molokai
+  "colorscheme Freya
+  colorscheme Wombat
+  "colorscheme Railscasts
   "set nonu
     set guifont=Menlo\ Regular:h13
 else
@@ -67,6 +71,9 @@ set noswapfile
 let mapleader = ","
 let g:mapleader = ","
 
+
+" Syntax coloring for thor files
+autocmd BufNewFile,BufRead *.thor set filetype=ruby
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -106,7 +113,7 @@ set t_vb=
 set tm=500
 
 set linespace=2
-set number
+"set number
 set tabstop=4
 set shiftwidth=2
 set expandtab
@@ -136,15 +143,14 @@ endfunction
  
 " map <S-C-j> <C-W>j<C-W>_
 " Smart way to move btw. windows
-" map <C-j> <C-W>j  " Move without splitting
-" map <C-k> <C-W>k
-" map <C-h> <C-W>h
-" map <C-l> <C-W>l
-" map <C-j> :call WinMove('j')<cr>
-map <C-k> :call WinMove('k')<cr>
-map <C-h> :call WinMove('h')<cr>
-map <C-l> :call WinMove('l')<cr>
-map <C-j> :call WinMove('j')<cr>
+map <C-j> <C-W>j  " Move without splitting
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+"map <C-k> :call WinMove('k')<cr>
+"map <C-h> :call WinMove('h')<cr>
+"map <C-l> :call WinMove('l')<cr>
+"map <C-j> :call WinMove('j')<cr>
 
 
 map <C-s> <C-W>v
@@ -224,7 +230,19 @@ endif
 " => Codepaths
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:codepath = "/Users/rdhallman/rg"
+let g:codepath = "/Users/rdhallman/rg/backend"
+
+function! FindProjectRoot(lookFor)
+    let pathMaker='%:p'
+    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+        let pathMaker=pathMaker.':h'
+        let fileToCheck=expand(pathMaker).'/'.a:lookFor
+        if filereadable(fileToCheck)||isdirectory(fileToCheck)
+            return expand(pathMaker)
+        endif
+    endwhile
+    return 0
+endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -242,8 +260,8 @@ let NERDTreeShowBookmarks   =   1
 let NERDTreeMinimalUI       =   1
 let NERDTreeShowHidden      =   1
 
-nnoremap <silent> <F4> :NERDTreeToggle `=codepath#path ()`<cr>
-inoremap <silent> <F4> <Esc>:NERDTreeToggle `=codepath#path()`<cr>
+let NERDTreeIgnore=['\.git[[dir]]', '\.idea[[dir]]', 'nbproject[[dir]]', 'vendor[[dir]]']
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -294,22 +312,23 @@ map <Leader>p	:Project<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Command-T
+" => CtrlP   (was Command-T)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:CommandTMaxHeight = 15
-set wildignore+=*.o,*.obj,.git,*.pyc
+set wildignore+=*/.git/*,*/.idea/*,*/.hg/*,*/.svn/*  " Linux/MacOSX
 
+nmap <Leader>t  :CtrlP<CR>
+nmap <Leader>u  :CtrlPMRU<CR>
+nmap <Leader>b  :CtrlPBuffer<CR>
 
-nmap <Leader>w  :CommandTBuffer<CR>
-nmap <Leader>u  :CommandTFlush<CR>
+"let g:CommandTMaxHeight = 15
+"set wildignore+=*.o,*.obj,.git,*.pyc
+"let g:CommandTMaxFiles=20000
+"let g:CommandTMatchWindowAtTop=0
+"let g:CommandTMatchWindowReverse=1
 
-let g:CommandTMaxFiles=20000
-let g:CommandTMatchWindowAtTop=0
-let g:CommandTMatchWindowReverse=1
-
-map <silent> <C-T> :CommandT <c-r>=codepath#path()<CR><CR>
-imap <silent> <C-T> <ESC>:CommandT <c-r>=codepath#path()<CR><CR>
+"map <silent> <C-T> :CommandT <c-r>=codepath#path()<CR><CR>
+"imap <silent> <C-T> <ESC>:CommandT <c-r>=codepath#path()<CR><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => LustyExplorer
@@ -324,13 +343,12 @@ nmap <Leader>f  :LustyFilesystemExplorerFromHere<CR>
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
-nmap <Leader>t  :FufFile<CR>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Specky
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:speckyRunSpecCmd = "bundle exec rspec -r ~/.vim/bundle/Specky/ruby/specky_formatter.rb -f SpeckyFormatter"
+let project_root = FindProjectRoot('.git')
+let g:speckyRunSpecCmd = "./bin/rspec -r ~/.vim/bundle/Specky/ruby/specky_formatter.rb -f SpeckyFormatter"
 let g:speckyBannerKey        = "<C-r>b"
 let g:speckyQuoteSwitcherKey = "<C-r>'"
 let g:speckyRunRdocKey       = "<C-r>r"
@@ -344,20 +362,19 @@ let g:speckyWindowType       = 2
 " => Ruby Debugger
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:ruby_debugger_spec_path = 'rspec'
+let g:ruby_debugger_spec_path = './bin/rspec'
 let g:ruby_debugger_progname = 'mvim'
 
-map <Lkader>b  :call g:RubyDebugger.toggle_breakpoint()<CR>
-map <Leader>b  :call g:RubyDebugger.toggle_breakpoint()<CR>
-map <Leader>v  :call g:RubyDebugger.open_variables()<CR>
-map <Leader>dm  :call g:RubyDebugger.open_breakpoints()<CR>
-map <Leader>dt  :call g:RubyDebugger.open_frames()<CR>
-map <Leader>s  :call g:RubyDebugger.step()<CR>
-map <Leader>df  :call g:RubyDebugger.finish()<CR>
-map <Leader>m  :call g:RubyDebugger.next()<CR>
-map <Leader>dc  :call g:RubyDebugger.continue()<CR>
-map <Leader>de  :call g:RubyDebugger.exit()<CR>
-map <Leader>dr  :call g:RubyDebugger.remove_breakpoints()<CR>
+map <Leader><Leader>b  :call g:RubyDebugger.toggle_breakpoint()<CR>
+map <Leader><Leader>v  :call g:RubyDebugger.open_variables()<CR>
+map <Leader><Leader>o  :call g:RubyDebugger.open_breakpoints()<CR>
+map <Leader><Leader>f  :call g:RubyDebugger.open_frames()<CR>
+map <Leader><Leader>s  :call g:RubyDebugger.step()<CR>
+map <Leader><Leader>q  :call g:RubyDebugger.finish()<CR>
+map <Leader><Leader>n  :call g:RubyDebugger.next()<CR>
+map <Leader><Leader>c  :call g:RubyDebugger.continue()<CR>
+map <Leader><Leader>e  :call g:RubyDebugger.exit()<CR>
+map <Leader><Leader>r  :call g:RubyDebugger.remove_breakpoints()<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Syntastic
