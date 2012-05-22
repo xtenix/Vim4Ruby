@@ -7,11 +7,15 @@
   #"git://github.com/vim-scripts/FuzzyFinder.git",
   #"git://github.com/sethbc/fuzzyfinder_textmate.git"
 
+  #
+  # NOTE: Here are some other vim projects you may
+  # want to include in your Vim build.  I'm currently
+  # not using these, so I've commented the below for now.
+  #
   #"git://github.com/gregsexton/gitv.git",
   #"git://github.com/nanotech/jellybeans.vim.git",
   #"git://github.com/vim-scripts/mru.vim.git",
   #"git://github.com/vim-scripts/project.tar.gz.git",
-  #"git://github.com/rosenfeld/conque-term.git",
   #"git://github.com/nathanaelkane/vim-indent-guides.git",
   #"git://github.com/vim-scripts/LustyJuggler.git",
   #"git://github.com/tsaleh/vim-shoulda.git",
@@ -34,7 +38,7 @@
 git_bundles = [ 
   "git://github.com/tpope/vim-pathogen.git",
   "git://github.com/scrooloose/syntastic.git",
-  "git://github.com/vim-scripts/Specky.git",
+  "git@github.com:dhallman/Specky.git",
   "git://github.com/tpope/vim-endwise.git",
   "git@github.com:dhallman/bufexplorer.git",
   "git://github.com/vim-scripts/Color-Sampler-Pack.git",
@@ -45,11 +49,13 @@ git_bundles = [
   "git://github.com/tsaleh/vim-matchit.git",
   "git://github.com/vim-scripts/ZoomWin.git",
   "git://github.com/mileszs/ack.vim.git",
+  "git://github.com/rosenfeld/conque-term.git",
   "git://github.com/vim-scripts/LustyExplorer.git",
   "git://github.com/lucapette/codepath.vim.git",
   "git://github.com/astashov/vim-ruby-debugger.git",
   "git://github.com/vincentv/dotvim.git",
   "git://github.com/tpope/vim-bundler.git",
+  "git://github.com/tpope/vim-rvm.git",
   "git://github.com/kien/ctrlp.vim.git"
 ]
 
